@@ -3586,6 +3586,7 @@ function escapeHtml(value) {
         }
 
         return deliveryCandidates.find(job => {
+            if (!jobsHaveCompatibleInvoiceNumbers(source, job)) return false;
             if (cleanTwoCardCustomerName(job.customer_name).toLowerCase() !== sourceBaseName) return false;
             if (!sameLocalDateValue(job.coll_datetime, source.coll_datetime)) return false;
             if (!sameLocalDateValue(job.del_datetime, source.del_datetime)) return false;
@@ -3616,6 +3617,7 @@ function escapeHtml(value) {
         }
 
         return collectionCandidates.find(job => {
+            if (!jobsHaveCompatibleInvoiceNumbers(source, job)) return false;
             if (cleanTwoCardCustomerName(job.customer_name).toLowerCase() !== sourceBaseName) return false;
             if (!sameLocalDateValue(job.coll_datetime, source.coll_datetime)) return false;
             if (!sameLocalDateValue(job.del_datetime, source.del_datetime)) return false;
@@ -4950,7 +4952,16 @@ Standard jobs without extra legs will continue to save normally.`);
         return /\(Leg\s*\d+\)\s*$/i.test(String(name || ''));
     }
 
-    function sameLocalDateValue(a, b) {
+    function getCleanFtsNumber(job) {
+        return String(job && job.fts_invoice_number || '').trim().toLowerCase();
+    }
+
+    function jobsHaveCompatibleInvoiceNumbers(a, b) {
+        const aFts = getCleanFtsNumber(a);
+        const bFts = getCleanFtsNumber(b);
+        return !aFts || !bFts || aFts === bFts;
+    }
+function sameLocalDateValue(a, b) {
         const aKey = getLocalDateKeyFromValue(a);
         const bKey = getLocalDateKeyFromValue(b);
         return !!aKey && !!bKey && aKey === bKey;
@@ -5003,7 +5014,7 @@ Standard jobs without extra legs will continue to save normally.`);
         const group = source[LINKED_JOB_GROUP_COLUMN];
         if (group !== null && group !== undefined && String(group).trim() !== '') {
             allJobsRaw.forEach(job => {
-                if (String(job[LINKED_JOB_GROUP_COLUMN] || '') === String(group)) {
+                if (String(job[LINKED_JOB_GROUP_COLUMN] || '') === String(group) && jobsHaveCompatibleInvoiceNumbers(source, job)) {
                     linked.set(String(job.id), job);
                 }
             });
