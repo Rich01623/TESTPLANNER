@@ -3327,7 +3327,7 @@ function escapeHtml(value) {
     }
 
     function cleanCardDomId(id) {
-        return String(id || '').replace(/^ghost-/, '');
+        return String(id || '').replace(/^ghost-/, '').replace(/^delivery-/, '');
     }
 
     function hasPlannerSortOverride(job) {
@@ -3456,10 +3456,6 @@ function escapeHtml(value) {
     window.startCardReorderDrag = (event, id) => {
         if (!event || !event.dataTransfer) return;
         const card = document.getElementById(String(id));
-        if (card && !card.draggable) {
-            event.preventDefault();
-            return;
-        }
         isDragging = true;
         event.stopPropagation();
         event.dataTransfer.effectAllowed = 'move';
@@ -3735,7 +3731,7 @@ function escapeHtml(value) {
         };
         card.ondragend = () => { isDragging = false; };
         card.onclick = (e) => {
-            if (e.target.closest('.action-btn, button, input, select, textarea, a')) return;
+            if (e.target.closest('.action-btn, .card-reorder-handle, button, input, select, textarea, a')) return;
             openJobDetailsModal(e, q.id, false);
         };
 
@@ -3743,8 +3739,10 @@ function escapeHtml(value) {
         const palletTag = q.total_pallets ? `<span class="vehicle-tag" style="background:#d68910;">${escapeHtml(q.total_pallets)} Plt</span>` : '';
         const weightTag = q.total_weight ? `<span class="vehicle-tag" style="background:#666;">${escapeHtml(q.total_weight)}kg</span>` : '';
         const podDownloadButton = q.pod_url && !isVirtualDelivery ? `<button type="button" class="pod-download-card-btn" onclick="downloadPODPdf(event, '${escapeInlineArg(q.id)}')">DOWNLOAD POD PDF</button>` : '';
+        const reorderHandleHtml = `<div class="card-reorder-handle" draggable="true" title="Rearrange this card within this grid space" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()" ondragstart="startCardReorderDrag(event, '${card.id}')" ondragend="endCardReorderDrag(event)">☰</div>`;
 
         card.innerHTML = `
+            ${reorderHandleHtml}
             <div class="two-card-header ${role}">
                 <div class="two-card-fts-line"><span class="two-card-fts">${escapeHtml(q.fts_invoice_number || 'NO FTS')}</span>${dispatchDotHtml}</div>
                 <div class="two-card-route">
@@ -3992,7 +3990,7 @@ function escapeHtml(value) {
             ? `<span class="action-btn release-action-btn" title="Release this completed card so it can be planned again" onclick="releaseCompletedCard(event, '${q.id}')">Release</span>`
             : '';
         let actionsHtml = '';
-        const reorderHandleHtml = (!isGhost && !isCompleted)
+        const reorderHandleHtml = (!isGhost)
             ? `<div class="card-reorder-handle" draggable="true" title="Rearrange this card within this grid space" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()" ondragstart="startCardReorderDrag(event, '${q.id}')" ondragend="endCardReorderDrag(event)">☰</div>`
             : '';
         
@@ -5811,7 +5809,7 @@ Are you sure you want to place it here?`);
         const isGhostDeliveryDrag = String(rawId || '').startsWith('ghost-');
 
         if (isReorderDrag && sourceCard && sourceCard.parentElement === finalTarget) {
-            await reorderCardInsideContainer(id, finalTarget, dropTargetCard, ev.clientY);
+            await reorderCardInsideContainer(sourceCard.id, finalTarget, dropTargetCard, ev.clientY);
             return;
         }
 
