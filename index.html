@@ -101,15 +101,15 @@
         /* ==========================================
            4. PLANNER GRID & CELLS
            ========================================== */
-        table.planner-table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 4200px; } 
+        table.planner-table { width: 100%; border-collapse: separate; border-spacing: 2px 2px; min-width: 4200px; background: #b8b8b8; } 
         
         .corner-header { position: sticky; top: 0; left: 0; z-index: 30; background: var(--frost-black); color: white; border-right: 3px solid var(--frost-red); border-bottom: 3px solid var(--frost-red); width: 120px; text-align: center; }
-        .vehicle-col-header { position: sticky; top: 0; z-index: 20; background: var(--frost-black); color: white; border-right: 1px solid var(--border-color); border-bottom: 3px solid var(--frost-red); padding: 10px; min-width: 240px; vertical-align: top; text-align: left; transition: background-color 0.3s; }
+        .vehicle-col-header { position: sticky; top: 0; z-index: 20; background: var(--frost-black); color: white; border-right: 0; border-bottom: 2px solid #b8b8b8; padding: 10px; min-width: 240px; vertical-align: top; text-align: left; transition: background-color 0.3s; }
         .vehicle-col-header.palletforce-header { background: #f58220; border-bottom-color: #c85f00; color: white; }
         .vehicle-col-header.palletforce-header .reg-title { color: white; }
         .vehicle-col-header.palletforce-header .driver-weekly-total { color: rgba(255,255,255,0.85); }
         .vehicle-col-header.palletforce-header .trailer-tag { background: rgba(0,0,0,0.28); color: white; }
-        .status-col-header { position: sticky; top: 0; z-index: 20; background: #34495e; color: white; border-right: 1px solid var(--border-color); border-bottom: 3px solid var(--frost-red); padding: 10px; min-width: 240px; vertical-align: middle; text-align: center; font-size: 0.9rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3px; }
+        .status-col-header { position: sticky; top: 0; z-index: 20; background: #34495e; color: white; border-right: 0; border-bottom: 2px solid #b8b8b8; padding: 10px; min-width: 240px; vertical-align: middle; text-align: center; font-size: 0.9rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3px; }
         .status-col-header.booking_requests-header { background: #0056b3; }
         .status-col-header.cancelled-header { background: #8a1c20; }
         table.planner-table td.status-booking_requests-cell { background: #f4f9ff !important; }
@@ -145,7 +145,7 @@
         .past-day-collapsed .date-cell { padding: 6px 8px; background: #dfe3e8; }
         .past-day-collapsed .job-card { display: none !important; }
 
-        table.planner-table td { border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); min-height: 125px; height: 125px; vertical-align: top; padding: 6px; background: white; transition: background 0.2s; position: relative; }
+        table.planner-table td { border-right: 0; border-bottom: 0; min-height: 125px; height: 125px; vertical-align: top; padding: 6px; background: white; transition: background 0.2s; position: relative; }
         table.planner-table td:hover { background: #fdfdfd; }
         table.planner-table td.palletforce-cell { background: #fff3e6; }
         table.planner-table td.palletforce-cell:hover { background: #ffe8cf; }
@@ -219,9 +219,6 @@
         .on-unlock-wrap { display: flex; justify-content: center; margin: -2px 0 7px; }
         .on-unlock-btn { border: 1px solid #e67e22; background: #fff7ed; color: #9a3412; border-radius: 4px; padding: 3px 7px; font-size: 0.68rem; font-weight: 900; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; line-height: 1; font-family: inherit; }
         .on-unlock-btn:hover { background: #e67e22; border-color: #e67e22; color: white; }
-        .release-card-wrap { display:flex; justify-content:center; margin: 0 0 7px; }
-        .release-card-btn { border: 1px solid #c1272d; background: #c1272d; color: #fff !important; border-radius: 4px; padding: 4px 12px; font-size: 0.7rem; font-weight: 900; cursor: pointer; line-height: 1; font-family: inherit; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
-        .release-card-btn:hover { background: #9f1f25; border-color: #9f1f25; }
         .maintenance-card { background: #fffaf4 !important; border-left-color: #f58220 !important; }
         .maintenance-card.vehicle-maintenance { border-left-color: #8e44ad !important; }
         .maintenance-card.trailer-maintenance { border-left-color: #f58220 !important; }
@@ -311,6 +308,8 @@
         .card-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; justify-content: space-between; }
         .action-btn { color: #666; cursor: pointer; font-size: 1.1rem; transition: color 0.2s; }
         .action-btn:hover { color: var(--frost-red); }
+        .release-action-btn { border: 1px solid #c1272d; background: #c1272d; color: #fff !important; border-radius: 4px; padding: 3px 7px; font-size: 0.68rem; font-weight: 900; line-height: 1; display: inline-flex; align-items: center; }
+        .release-action-btn:hover { background: #9f1f25; border-color: #9f1f25; color: #fff !important; }
 
         .card-body { display: none; margin-top: 8px; line-height: 1.4; border-top: 1px solid #eee; padding-top: 5px;}
         .expanded .card-body { display: block; }
@@ -2726,6 +2725,7 @@ function escapeHtml(value) {
         });
 
         renderBookingRequests();
+        sortAllPlannerContainers();
         
         updateCalculations();
         restoreDrivers(allJobsRaw);
@@ -3347,9 +3347,62 @@ function escapeHtml(value) {
     }
 
     function getPlannerDefaultTime(job) {
-        if (!job || !job.coll_datetime) return Infinity;
-        const time = new Date(job.coll_datetime).getTime();
+        const value = getPlannerDateForCard(job) || (job && job.coll_datetime);
+        if (!value) return Infinity;
+        const time = new Date(value).getTime();
         return Number.isFinite(time) ? time : Infinity;
+    }
+
+    function getPlannerCardSortTime(job, role = '') {
+        const value = role === 'delivery'
+            ? (job && (job.del_datetime || job.coll_datetime))
+            : role === 'collection'
+                ? (job && (job.coll_datetime || job.del_datetime))
+                : (getPlannerDateForCard(job) || (job && job.coll_datetime));
+        if (!value) return Infinity;
+        const time = new Date(value).getTime();
+        return Number.isFinite(time) ? time : Infinity;
+    }
+
+    function stampPlannerCardSortData(card, job, role = '') {
+        if (!card) return;
+        const manual = hasPlannerSortOverride(job);
+        card.dataset.plannerSortManual = manual ? 'true' : 'false';
+        card.dataset.plannerSortOrder = manual ? String(getPlannerSortOrder(job)) : '';
+        card.dataset.plannerSortTime = String(getPlannerCardSortTime(job, role));
+    }
+
+    function getCardDatasetNumber(card, key, fallback = Infinity) {
+        const value = Number(card && card.dataset ? card.dataset[key] : NaN);
+        return Number.isFinite(value) ? value : fallback;
+    }
+
+    function comparePlannerCardElementsForDisplay(a, b) {
+        const manualA = a?.dataset?.plannerSortManual === 'true' && Number.isFinite(Number(a.dataset.plannerSortOrder));
+        const manualB = b?.dataset?.plannerSortManual === 'true' && Number.isFinite(Number(b.dataset.plannerSortOrder));
+
+        if (manualA && manualB) {
+            const orderDiff = getCardDatasetNumber(a, 'plannerSortOrder') - getCardDatasetNumber(b, 'plannerSortOrder');
+            if (orderDiff !== 0) return orderDiff;
+        } else if (manualA !== manualB) {
+            return manualA ? 1 : -1;
+        }
+
+        const timeDiff = getCardDatasetNumber(a, 'plannerSortTime') - getCardDatasetNumber(b, 'plannerSortTime');
+        if (timeDiff !== 0) return timeDiff;
+        return String(a?.id || '').localeCompare(String(b?.id || ''));
+    }
+
+    function sortPlannerContainerCards(container) {
+        if (!container) return;
+        const cards = Array.from(container.querySelectorAll(':scope > .job-card:not(.modal-job-card-copy)'));
+        if (cards.length < 2) return;
+        cards.sort(comparePlannerCardElementsForDisplay).forEach(card => container.appendChild(card));
+    }
+
+    function sortAllPlannerContainers() {
+        document.querySelectorAll('#planner-board td, #pool-container .pool-zone, #maintenance-sidebar .maintenance-pool-zone')
+            .forEach(sortPlannerContainerCards);
     }
 
     function comparePlannerCardsForDisplay(a, b) {
@@ -3617,7 +3670,7 @@ function escapeHtml(value) {
                     <span class="action-btn" onclick="duplicateJob(event, '${q.id}')" title="Duplicate">&#10064;</span>
                     <span class="action-btn" onclick="openPODImage(event, '${q.id}')" title="Open POD Image">&#128206;</span>
                     <span class="action-btn" onclick="queryRoute(event, '${q.coll_postcode}', '${q.del_postcode}')" title="Maps">&#128205;</span>
-                    ${q.status !== 'completed' ? `<span class="action-btn" onclick="markPODReceived(event, '${q.id}')" title="Complete POD">&#9989;</span>` : ''}
+                    ${q.status !== 'completed' ? `<span class="action-btn" onclick="markPODReceived(event, '${q.id}')" title="Complete POD">&#9989;</span>` : (!isVirtualDelivery ? `<span class="action-btn release-action-btn" onclick="releaseCompletedCard(event, '${q.id}')" title="Release this completed card so it can be planned again">Release</span>` : '')}
                 </div>
                 ${isVirtualDelivery ? '' : `<span class="action-btn" onclick="deleteJob('${q.id}')" style="color:red;" title="Delete">&#128465;&#65039;</span>`}
             </div>`;
@@ -3670,6 +3723,7 @@ function escapeHtml(value) {
         card.dataset.cardRole = role;
         card.dataset.virtualDelivery = isVirtualDelivery ? 'true' : 'false';
         card.dataset.targetWeek = getPlannerBoardWeekIndex(eventTime || q.coll_datetime || q.del_datetime);
+        stampPlannerCardSortData(card, q, role);
         card.draggable = !isCompleted;
         card.ondragstart = (e) => {
             if (!card.draggable) return;
@@ -3689,9 +3743,6 @@ function escapeHtml(value) {
         const palletTag = q.total_pallets ? `<span class="vehicle-tag" style="background:#d68910;">${escapeHtml(q.total_pallets)} Plt</span>` : '';
         const weightTag = q.total_weight ? `<span class="vehicle-tag" style="background:#666;">${escapeHtml(q.total_weight)}kg</span>` : '';
         const podDownloadButton = q.pod_url && !isVirtualDelivery ? `<button type="button" class="pod-download-card-btn" onclick="downloadPODPdf(event, '${escapeInlineArg(q.id)}')">DOWNLOAD POD PDF</button>` : '';
-        const releaseButtonHtml = (!isVirtualDelivery && isCompleted)
-            ? `<div class="release-card-wrap"><button type="button" class="release-card-btn" title="Release this completed card so it can be planned again" onclick="releaseCompletedCard(event, '${q.id}')">Release</button></div>`
-            : '';
 
         card.innerHTML = `
             <div class="two-card-header ${role}">
@@ -3701,7 +3752,6 @@ function escapeHtml(value) {
                     <span class="two-card-time">${escapeHtml(timeText)}</span>
                 </div>
             </div>
-            ${releaseButtonHtml}
             <div class="card-body">
                 <span class="two-card-type ${role}">${role === 'delivery' ? 'DELIVERY' : 'COLLECTION'}</span>
                 <div class="two-card-main" title="${escapeHtml(cleanCustomer)}">${escapeHtml(cleanCustomer)} ${contractBadge}</div>
@@ -3780,6 +3830,7 @@ function escapeHtml(value) {
 
         let targetWeek = getPlannerBoardWeekIndex(q.coll_datetime);
         card.dataset.targetWeek = targetWeek;
+        stampPlannerCardSortData(card, q, isGhost ? 'delivery' : cardRole);
 
         let pcHeader = "";
         let headerAlignment = "center";
@@ -3937,10 +3988,8 @@ function escapeHtml(value) {
                 </button>
             </div>`
             : '';
-        const releaseButtonHtml = (!isGhost && isCompleted)
-            ? `<div class="release-card-wrap">
-                <button type="button" class="release-card-btn" title="Release this completed card so it can be planned again" onclick="releaseCompletedCard(event, '${q.id}')">Release</button>
-            </div>`
+        const releaseActionHtml = (!isGhost && isCompleted)
+            ? `<span class="action-btn release-action-btn" title="Release this completed card so it can be planned again" onclick="releaseCompletedCard(event, '${q.id}')">Release</span>`
             : '';
         let actionsHtml = '';
         const reorderHandleHtml = (!isGhost && !isCompleted)
@@ -3960,7 +4009,7 @@ function escapeHtml(value) {
                         <span class="action-btn" onclick="duplicateJob(event, '${q.id}')" title="Duplicate">❐</span>
                         <span class="action-btn" onclick="openPODImage(event, '${q.id}')" title="Open POD Image">📎</span>
                         <span class="action-btn" onclick="queryRoute(event, '${q.coll_postcode}', '${q.del_postcode}')" title="Maps">📍</span>
-                        ${!isCompleted ? `<span class="action-btn" onclick="markPODReceived(event, '${q.id}')" title="Complete POD">✅</span>` : ''}
+                        ${!isCompleted ? `<span class="action-btn" onclick="markPODReceived(event, '${q.id}')" title="Complete POD">✅</span>` : releaseActionHtml}
                     </div>
                     <span class="action-btn" onclick="deleteJob('${q.id}')" style="color:red;">🗑️</span>
                 </div>
@@ -3976,11 +4025,10 @@ function escapeHtml(value) {
             card.innerHTML = `
                 ${ghostBanner}
                 ${reorderHandleHtml}
-                ${releaseButtonHtml}
                 <div class="postcode-header" style="align-items: ${headerAlignment};">${pcHeader}</div>
                 <div class="card-body">
                     <div class="card-actions" style="justify-content: flex-end; padding-bottom:0; border:none; margin-bottom:5px;">
-                        <span class="action-btn" onclick="deleteJob('${q.id}')" style="color:red;" title="Delete Instruction">🗑️</span>
+                        ${releaseActionHtml}<span class="action-btn" onclick="deleteJob('${q.id}')" style="color:red;" title="Delete Instruction">🗑️</span>
                     </div>
                     <div style="font-weight:bold; color:#0f766e; font-size: 0.8rem; margin-bottom: 5px;">EMPTY MOVEMENT <span class="instruction-badge">INSTRUCTION</span></div>
                     <div style="background: #ffffff; padding: 10px; border-radius: 4px; border: 1px dashed #0f766e; margin-bottom: 5px; font-size: 0.75rem; color: #333; font-weight: 700;">
@@ -3996,11 +4044,10 @@ function escapeHtml(value) {
             
             card.innerHTML = `
                 ${reorderHandleHtml}
-                ${releaseButtonHtml}
                 <div class="postcode-header" style="color:#d68910; align-items: ${headerAlignment};">${pcHeader}</div>
                 <div class="card-body">
                     <div class="card-actions" style="justify-content: flex-end; padding-bottom:0; border:none; margin-bottom:5px;">
-                        <span class="action-btn" onclick="deleteJob('${q.id}')" style="color:red;" title="Delete Note">🗑️</span>
+                        ${releaseActionHtml}<span class="action-btn" onclick="deleteJob('${q.id}')" style="color:red;" title="Delete Note">🗑️</span>
                     </div>
                     <div style="background: #ffffff; padding: 10px; border-radius: 4px; border: 1px dashed #f39c12; margin-bottom: 5px; font-size: 0.75rem; color: #333; white-space: pre-wrap; font-weight: 500;">${q.coll_ref || ''}</div>
                 </div>`;
@@ -4044,11 +4091,10 @@ function escapeHtml(value) {
             card.innerHTML = `
                 ${ghostBanner}
                 ${reorderHandleHtml}
-                ${releaseButtonHtml}
                 <div class="postcode-header" style="color:${titleColor}; align-items: ${headerAlignment};">${pcHeader}</div>
                 <div class="card-body">
                     <div class="card-actions" style="justify-content: flex-end; padding-bottom:0; border:none; margin-bottom:5px;">
-                        ${delBtn}
+                        ${releaseActionHtml}${delBtn}
                     </div>
                     
                     <div style="font-weight:bold; color:${titleColor}; font-size: 0.85rem; margin-bottom: 8px; text-align:center;">
@@ -4102,7 +4148,6 @@ function escapeHtml(value) {
                 ${ghostBanner}
                 ${reorderHandleHtml}
                 ${ftsCardHeader}
-                ${releaseButtonHtml}
                 <div class="postcode-header" style="align-items: ${headerAlignment};">${pcHeader}</div>
                 ${onUnlockHtml}
                 <div class="card-body">
@@ -4145,6 +4190,7 @@ function escapeHtml(value) {
         card.className = 'job-card booking-request-card';
         card.id = `booking-request-${requestId}`;
         card.draggable = false;
+        stampPlannerCardSortData(card, request, 'collection');
         card.onclick = (event) => {
             if (event.target.closest('button, .action-btn, a, input, select, textarea')) return;
             openBookingRequestDetailsModal(event, requestId);
